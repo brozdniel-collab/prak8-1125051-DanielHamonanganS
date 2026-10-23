@@ -1,47 +1,47 @@
 package hy.material8database;
 
-import hy.material8database.models.Mahasiswa;
-import hy.material8database.repository.MahasiswaRepository;
-import java.util.List;
 import java.util.Scanner;
 
+import hy.material8database.view.JurView;
+import hy.material8database.view.MahaView;
+import hy.material8database.view.MatkulView;
+
 public class App {
+
+    private void menuMahasiswa() {
+        new MahaView().menuMahasiswa();
+    }
+
+    private void menuJurusan() {
+        new JurView().menuJurusan();
+    }
+    private void menuMataKuliah() {
+        new MatkulView().menuMK();
+    }
 
     private Scanner scanner = new Scanner(System.in);
 
     public App() {
-        printAllMahasiswa();
+        boolean check = true;
 
-        while (true) {
-            System.out.print("\nTambahkan Mahasiswa? (y/n): ");
-            String input = scanner.nextLine().toLowerCase();
+        while (check) {
+            System.out.println("=== Menu Utama===");
 
-            if (input.equals("y")) {
-                addNewMahasiswa();
-            } else {
-                break;
+            System.out.println("List Menu \n 1. Menu Mahasiswa \n 2. Menu Jurusan \n 3. Menu Mata Kuliah");
+            System.out.println("Masukkan Menu: ");
+            int mainMenu = scanner.nextInt();
+
+            switch (mainMenu) {
+                case 1:
+                    menuMahasiswa();
+                    break;
+                case 2:
+                    menuJurusan();
+                case 3:
+                    menuMataKuliah();
+                default:
+                    throw new AssertionError();
             }
-
-            printAllMahasiswa();
-        }
-    }
-
-    private void addNewMahasiswa() {
-        System.out.print("Masukkan NIM: ");
-        String nim = scanner.nextLine();
-
-        System.out.print("Masukkan Nama: ");
-        String nama = scanner.nextLine();
-
-        Mahasiswa mhs = new Mahasiswa(nim, nama);
-        MahasiswaRepository.addMahasiswa(mhs);
-    }
-
-    private void printAllMahasiswa() {
-        List<Mahasiswa> allMahasiswa = MahasiswaRepository.getAllMahasiswa();
-        System.out.println("\n📋 Daftar Mahasiswa:");
-        for (Mahasiswa m : allMahasiswa) {
-            System.out.println(m.nim + " - " + m.nama);
         }
     }
 

@@ -1,13 +1,15 @@
 package hy.material8database.repository;
 
-import hy.material8database.database.Database;
-import hy.material8database.models.Mahasiswa;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
+import hy.material8database.database.Database;
+import hy.material8database.models.Mahasiswa;
+import hy.material8database.models.MahasiswaMK;
 
 public class MahasiswaRepository {
 
@@ -94,5 +96,27 @@ public class MahasiswaRepository {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public static List<MahasiswaMK> getMahasiswaMK(Mahasiswa mhs) {
+        List<MahasiswaMK> result = new ArrayList<>();
+        String sql = "select * from mahasiswa_matakuliah where nim = ?";
+        try {
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, mhs.nim);
+            ResultSet resultSet = stmt.executeQuery();
+            while (resultSet.next()) {
+                result.add(
+                    new MahasiswaMK(
+                        resultSet.getString("nim"),
+                        resultSet.getString("kode_matakuliah"),
+                        resultSet.getString("indeks_nilai")
+                    )
+                );
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return result;
     }
 }
